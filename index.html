@@ -8,9 +8,7 @@
   <body>
     <div id="app">
       <form @submit.stop.prevent="reserve">
-        <label
-          >予約日: <input v-model="form.date" type="date" required
-        /></label>
+        <label>予約日: <input v-model="form.date" type="date" required /></label>
         <label>名前: <input v-model="form.name" required /></label>
         <input type="submit" />
       </form>
@@ -28,10 +26,10 @@
         },
         methods: {
           async reserve() {
-            const res = await axios
-              .post("http://localhost:3000/reservations", this.form)
-              .catch((err) => alert(err));
-            if (res) alert("予約しました");
+            const res = await axios.post("http://localhost:3000/reservations", this.form).catch((err) => alert("予約できませんでした。\n別の日を選択してください。"));
+            if (res) {
+              alert("予約しました");
+            }
           },
         },
       });

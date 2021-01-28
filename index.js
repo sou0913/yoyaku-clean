@@ -8,7 +8,6 @@ const cors = require("cors");
 app.use(cors());
 
 const sqlite3 = require("sqlite3").verbose();
-
 let db = new sqlite3.Database("./dev.db", (err) => {
   if (err) {
     console.error(err.message);
@@ -16,23 +15,16 @@ let db = new sqlite3.Database("./dev.db", (err) => {
   console.log("Connected to Database.");
 });
 
-app.get("/reservations/", (req, res) => {
-  db.all("select * from reservations", function (err, row) {
-    if (err) throw err;
-    res.send(row);
-  });
-});
-
 app.post("/reservations", (req, res) => {
   const params = req.body;
-  db.run(
-    "insert into reservations (date, user_name) values ((?), (?))",
-    [params.date, params.name],
-    (err) => {
-      if (err) throw err;
+  db.run("insert into reservations (date, user_name) values ((?), (?))", [params.date, params.name], (err) => {
+    if (err) {
+      console.log(err);
+      res.status(422).send();
+    } else {
+      res.status(204).send();
     }
-  );
-  res.status(204).send();
+  });
 });
 
 app.listen(3000, () => {
