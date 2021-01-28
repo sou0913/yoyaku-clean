@@ -8,11 +8,19 @@ const cors = require("cors");
 app.use(cors());
 
 const sqlite3 = require("sqlite3").verbose();
+
 let db = new sqlite3.Database("./dev.db", (err) => {
   if (err) {
     console.error(err.message);
   }
   console.log("Connected to Database.");
+});
+
+app.get("/reservations", (req, res) => {
+  db.all("select * from reservations", function (err, row) {
+    if (err) throw err;
+    res.send(row);
+  });
 });
 
 app.post("/reservations", (req, res) => {
