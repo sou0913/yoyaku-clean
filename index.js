@@ -24,8 +24,14 @@ app.get("/reservations/", (req, res) => {
 });
 
 app.post("/reservations", (req, res) => {
-  console.log(req.body);
-  // db.exec('insert into reservations values ...');
+  const params = req.body;
+  db.run(
+    "insert into reservations (date, user_name) values ((?), (?))",
+    [params.date, params.name],
+    (err) => {
+      if (err) throw err;
+    }
+  );
   res.status(204).send();
 });
 
